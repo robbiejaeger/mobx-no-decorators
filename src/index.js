@@ -3,10 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import 'mobx-react-lite/batchingForReactDom';
+
+import { Provider } from 'mobx-react';
+import IdeasStore from './ideasStore';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider ideasStore={new IdeasStore()}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

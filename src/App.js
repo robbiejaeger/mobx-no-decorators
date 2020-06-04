@@ -1,26 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
+import { inject, observer } from 'mobx-react';
+
+const App = ({ ideasStore }) => {
+  const ideasEls = ideasStore.ideas.map(idea => {
+    return <h3 key={idea.title}>{idea.title}</h3>
+  });
+
+  function updateData(e) {
+    ideasStore.updateFormData(e.target.value)
+  }
+
+  function submitIdea() {
+    ideasStore.addIdea();
+    ideasStore.updateFormData('');
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {ideasStore.ideas.length ? ideasEls : "No ideas yet"}
+      <input value={ideasStore.formData} onChange={updateData} type="text" placeholder="Title..."/>
+      <button onClick={submitIdea}>Add Idea</button>
     </div>
   );
 }
 
-export default App;
+export default inject("ideasStore")(observer(App));
